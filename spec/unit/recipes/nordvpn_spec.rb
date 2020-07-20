@@ -37,7 +37,7 @@ describe 'nordvpn::nordvpn' do
     it 'converges successfully' do
       expect { chef_run }.to_not raise_error
     end
-    it 'installs docker' do
+    it 'installs nordvpn' do
       expect(chef_run).to install_package('nordvpn')
     end
   end
@@ -62,6 +62,7 @@ describe 'nordvpn::nordvpn' do
     end
     it 'adds nordvpn APT repo via deb package' do
       expect(chef_run).to create_remote_file(deb_package).with(checksum: deb_package_checksum, source: deb_package_url, owner: 'root', group: 'root', mode: '0755')
+      expect(chef_run).to install_dpkg_package('nordvpn-release').with(source: deb_package)
     end
 
     it 'installs nordvpn' do
@@ -93,6 +94,7 @@ describe 'nordvpn::nordvpn' do
     end
     it 'adds nordvpn APT repo via deb package' do
       expect(chef_run).to create_remote_file(deb_package).with(checksum: deb_package_checksum, source: deb_package_url, owner: 'root', group: 'root', mode: '0755')
+      expect(chef_run).to install_dpkg_package('nordvpn-release').with(source: deb_package)
     end
 
     it 'installs nordvpn' do
