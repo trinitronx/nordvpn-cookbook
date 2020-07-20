@@ -40,9 +40,10 @@ control 'nordvpn installed' do
   title 'Check if NordVPN works'
   desc 'Check nordvpn is working.'
 
-  only_if('Integration tests are NOT running in Dokken') do
-    test_driver != 'dokken'
-  end
+# No need to skip... these tests work in docker / Dokken
+#  only_if('Integration tests are NOT running in Dokken') do
+#    test_driver != 'dokken'
+#  end
 
   describe file('/usr/bin/nordvpn') do
     it { should exist }
