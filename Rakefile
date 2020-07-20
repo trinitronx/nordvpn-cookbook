@@ -47,7 +47,7 @@ namespace :maintainer do
 
   GitHubChangelogGenerator::RakeTask.new :changelog do |config|
     config.user = 'trinitronx'
-    config.project = 'lyraphase-docker'
+    config.project = 'nordvpn-cookbook'
   end
 end
 
