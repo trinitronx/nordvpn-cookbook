@@ -33,6 +33,11 @@ if nordvpn_config['deb_package_url'].nil? || nordvpn_config['deb_package_url'].e
   remote = deb_package_url
 else
   remote = nordvpn_config['deb_package_url']
+
+  require 'uri'
+  uri = URI.parse(remote)
+
+  deb_package = File.join(Chef::Config['file_cache_path'], File.basename(uri.path))
 end
 
 remote_file deb_package do
