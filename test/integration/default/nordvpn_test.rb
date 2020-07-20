@@ -21,19 +21,40 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# InSpec test for recipe lyraphase-docker::nordvpn
+# InSpec test for recipe nordvpn::nordvpn
 
 # The InSpec reference, with examples and extensive documentation, can be
 # found at https://www.inspec.io/docs/reference/resources/
 
+test_driver = input('test_driver')
 version = input('version')
-version_regexp = Regexp.new(version, Regexp::IGNORECASE | Regexp::MULTILINE)
+version_regexp = Regexp.new(version.to_s, Regexp::IGNORECASE | Regexp::MULTILINE)
 
-describe command('nordvpn -v') do
-  its('stdout') { should match(/nordvpn version/) }
-  its('stdout') { should match(version_regexp) }
+describe command('nordvpn --version') do
+  its(:exit_status) { should eq 0 }
+  its(:stdout) { should match(version_regexp) } if !version.nil? && !version.empty?
 end
 
-describe command('dpkg -l nordvpn') do
-  its('stdout') { should match(/^ii.*nordvpn.*$/) }
+control 'nordvpn installed' do
+  impact 'critical'
+  title 'Check if NordVPN works'
+  desc 'Check nordvpn is working.'
+
+  only_if('Integration tests are NOT running in Dokken') do
+    test_driver != 'dokken'
+  end
+
+  describe file('/usr/bin/nordvpn') do
+    it { should exist }
+    its('type') { should eq :file }
+    its('owner') { should eq 'root' }
+    its('group') { should eq 'root' }
+    its('mode') { should cmp '0755' }
+  end
+
+  describe systemd_service('nordvpnd') do
+    it { should be_enabled }
+    it { should be_installed }
+    it { should be_running }
+  end
 end
