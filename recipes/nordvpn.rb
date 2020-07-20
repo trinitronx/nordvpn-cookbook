@@ -48,6 +48,11 @@ remote_file deb_package do
   checksum nordvpn_config['deb_package_checksum'] || '16a05919b7259e679e4483aa39f61ef9bc9c07cbe040276e04884b5f9d7f933d'
 end
 
+dpkg_package 'nordvpn-release' do
+  source deb_package
+  action :install
+end
+
 package 'nordvpn' do
   version nordvpn_config['version'] if !nordvpn_config['version'].nil? && !nordvpn_config['version'].empty?
   action :install
