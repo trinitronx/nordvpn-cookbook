@@ -1,12 +1,8 @@
 # Changelog
 
-## [v0.1.0](https://github.com/trinitronx/lyraphase-docker/tree/v0.1.0) (2020-07-20)
+## [v0.1.0](https://github.com/trinitronx/nordvpn-cookbook/tree/v0.1.0) (2020-07-20)
 
-[Full Changelog](https://github.com/trinitronx/lyraphase-docker/compare/8a350f386201829ca9c6e9a3725ac34ac7571754...v0.1.0)
-
-**Merged pull requests:**
-
-- Initial release [\#1](https://github.com/trinitronx/lyraphase-docker/pull/1) ([trinitronx](https://github.com/trinitronx))
+[Full Changelog](https://github.com/trinitronx/nordvpn-cookbook/compare/86becbc843831c0fbdd9fa4d1cfd562f4192e615...v0.1.0)
 
 
 
