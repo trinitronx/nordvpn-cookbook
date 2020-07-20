@@ -1,0 +1,46 @@
+dist: bionic
+addons:
+  apt:
+    sources:
+      - chef-current-bionic
+# TODO: Enable when TravisCI adds this
+# Reference: https://github.com/travis-ci/apt-source-safelist/tree/master/keys
+#      - chef-current-focal
+    packages:
+      - chef-workstation
+services:
+  - docker
+
+sudo: required
+
+# Don't `bundle install` which takes about 1.5 mins
+install:
+  - export CHEF_LICENSE=accept ; eval "$(chef shell-init bash)"
+  - chef exec bundle install
+
+env:
+  - CHEF_LICENSE=accept
+
+#branches:
+#  only:
+#    - master
+
+services: docker
+
+env:
+  matrix:
+  - TEST_TYPE=integration KITCHEN_REGEXP=default-ubuntu
+#  - TEST_TYPE=integration KITCHEN_REGEXP=compose-binary-install-ubuntu
+  - TEST_TYPE=unit
+
+before_script:
+  - sudo iptables -L DOCKER || ( echo "DOCKER iptables chain missing" ; sudo iptables -N DOCKER )
+  - eval "$(chef shell-init bash)"
+  - chef --version
+
+script:
+  - 'if [[ "$TEST_TYPE" == "unit" ]]; then chef exec rake travis ; fi'
+  - 'if [[ "$TEST_TYPE" == "integration" ]]; then KITCHEN_LOCAL_YAML=.kitchen.dokken.yml kitchen verify ${KITCHEN_REGEXP} ; fi'
+after_failure:
+  - '[[ "$TEST_TYPE" == "integration" ]] && echo "---------------- KITCHEN LOGS ----------------"'
+  - '[[ "$TEST_TYPE" == "integration" ]] && cat .kitchen/logs/kitchen.log'
