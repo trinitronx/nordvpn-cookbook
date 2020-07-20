@@ -25,6 +25,8 @@
 # Install `nordvpn` via Linux [`.deb` package install method](https://nordvpn.com/download/linux/).
 # >
 
+include_recipe 'nordvpn::default'
+
 nordvpn_config = node['nordvpn']
 
 if nordvpn_config['deb_package_url'].nil? || nordvpn_config['deb_package_url'].empty?
@@ -51,6 +53,7 @@ end
 dpkg_package 'nordvpn-release' do
   source deb_package
   action :install
+  notifies :update, 'apt_update[update]', :immediately
 end
 
 package 'nordvpn' do

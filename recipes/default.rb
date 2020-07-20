@@ -22,8 +22,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # <
-# Add `nordvpn` users to `vpn` group.
+# Add `apt_update` no-op resource for `nordvpn` APT repo installation to notify later
 # >
+
+apt_update 'update' do
+  action :nothing
+end
 
 # if !node['nordvpn']['users'].nil? && !node['nordvpn']['users'].empty?
 #   group 'vpn' do
